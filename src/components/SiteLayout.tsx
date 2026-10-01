@@ -16,11 +16,8 @@ const links = [
 
 export function Logo() {
   return (
-    <Link to="/" className="flex items-center gap-2 font-display text-xl font-bold">
-      <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-primary text-primary-foreground shadow-glow">
-        <Sparkles className="h-5 w-5" />
-      </span>
-      Tee<span className="text-gradient">Genie</span>
+    <Link to="/" className="font-display text-2xl tracking-tight">
+      Tee<span className="italic">Genie</span>
     </Link>
   );
 }
@@ -29,7 +26,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
   const [authOpen, setAuthOpen] = useState(false);
   const [menu, setMenu] = useState(false);
   const open = () => { setAuthOpen(true); setMenu(false); };
-  const navCls = "rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground";
+  const navCls = "eyebrow px-4 py-2 text-muted-foreground transition-colors hover:text-foreground";
 
   return (
     <AuthCtx.Provider value={open}>
