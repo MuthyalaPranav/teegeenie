@@ -5,12 +5,11 @@ type Variant = "primary" | "outline" | "ghost";
 
 export const btnClass = (variant: Variant = "primary", size: "md" | "lg" = "md") =>
   cn(
-    "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-all duration-200 disabled:opacity-60",
-    size === "lg" ? "px-7 py-3.5 text-base" : "px-5 py-2.5 text-sm",
-    variant === "primary" &&
-      "bg-gradient-primary text-primary-foreground shadow-glow hover:-translate-y-0.5 hover:brightness-110",
+    "inline-flex items-center justify-center gap-2 rounded-none font-medium uppercase tracking-[0.18em] transition-all duration-300 disabled:opacity-60",
+    size === "lg" ? "px-8 py-4 text-xs" : "px-5 py-2.5 text-[0.7rem]",
+    variant === "primary" && "bg-primary text-primary-foreground hover:bg-primary-glow",
     variant === "outline" &&
-      "border border-border bg-card text-foreground hover:border-primary hover:text-primary",
+      "border border-foreground bg-transparent text-foreground hover:bg-foreground hover:text-background",
     variant === "ghost" && "text-foreground hover:bg-secondary",
   );
 
@@ -26,9 +25,9 @@ export function Button({
 export function SectionHeading({ eyebrow, title, sub }: { eyebrow: string; title: ReactNode; sub?: string }) {
   return (
     <div className="mx-auto max-w-2xl text-center">
-      <p className="text-sm font-semibold uppercase tracking-widest text-primary">{eyebrow}</p>
-      <h2 className="mt-3 text-3xl font-bold md:text-4xl">{title}</h2>
-      {sub && <p className="mt-4 text-muted-foreground">{sub}</p>}
+      <p className="eyebrow text-muted-foreground">{eyebrow}</p>
+      <h2 className="mt-4 text-4xl md:text-6xl">{title}</h2>
+      {sub && <p className="mt-5 text-muted-foreground">{sub}</p>}
     </div>
   );
 }
@@ -37,7 +36,7 @@ export function Card({ className, children }: { className?: string; children: Re
   return (
     <div
       className={cn(
-        "rounded-2xl border border-border bg-card p-7 shadow-soft transition-all duration-300 hover:-translate-y-1 hover:shadow-glow",
+        "border border-border bg-card p-8 transition-colors duration-300 hover:border-foreground",
         className,
       )}
     >
