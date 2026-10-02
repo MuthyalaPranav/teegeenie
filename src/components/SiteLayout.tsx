@@ -4,9 +4,9 @@ import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
 import type { User } from "@supabase/supabase-js";
 import { AuthModal } from "./AuthModal";
-import { Button, GoogleIcon } from "./ui-kit";
+import { Button } from "./ui-kit";
 import { supabase } from "@/integrations/supabase/client";
-import { signInWithGoogle, signOut } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
 
 const AuthCtx = createContext<() => void>(() => {});
 export const useOpenAuth = () => useContext(AuthCtx);
@@ -42,11 +42,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     return () => sub.subscription.unsubscribe();
   }, [router]);
 
-  const google = async () => {
-    const error = await signInWithGoogle();
-    if (error) toast.error(error);
-  };
-
   const logout = async () => {
     setMenu(false);
     await signOut();
@@ -70,10 +65,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             {user ? (
               <Button variant="ghost" onClick={logout}>Sign Out</Button>
             ) : (
-              <>
-                <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-                <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
-              </>
+              <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
             )}
           </div>
           <button className="rounded-lg p-2 md:hidden" onClick={() => setMenu(!menu)} aria-label="Toggle menu">
@@ -93,10 +85,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               {user ? (
                 <Button variant="ghost" onClick={logout}>Sign Out</Button>
               ) : (
-                <>
-                  <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-                  <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
-                </>
+                <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
               )}
             </div>
           </div>
