@@ -1,9 +1,12 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
-import { AuthModal, GOOGLE_MSG } from "./AuthModal";
+import type { User } from "@supabase/supabase-js";
+import { AuthModal } from "./AuthModal";
 import { Button, GoogleIcon } from "./ui-kit";
+import { supabase } from "@/integrations/supabase/client";
+import { signInWithGoogle, signOut } from "@/lib/auth";
 
 const AuthCtx = createContext<() => void>(() => {});
 export const useOpenAuth = () => useContext(AuthCtx);
