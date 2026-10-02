@@ -4,9 +4,9 @@ import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
 import type { User } from "@supabase/supabase-js";
 import { AuthModal } from "./AuthModal";
-import { Button, GoogleIcon } from "./ui-kit";
+import { Button } from "./ui-kit";
 import { supabase } from "@/integrations/supabase/client";
-import { signInWithGoogle, signOut } from "@/lib/auth";
+import { signOut } from "@/lib/auth";
 
 const AuthCtx = createContext<() => void>(() => {});
 export const useOpenAuth = () => useContext(AuthCtx);
@@ -41,11 +41,6 @@ export function SiteLayout({ children }: { children: ReactNode }) {
     });
     return () => sub.subscription.unsubscribe();
   }, [router]);
-
-  const google = async () => {
-    const error = await signInWithGoogle();
-    if (error) toast.error(error);
-  };
 
   const logout = async () => {
     setMenu(false);
