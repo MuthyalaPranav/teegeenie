@@ -67,8 +67,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="hidden items-center gap-2 md:flex">
-            <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-            <Button variant="outline" onClick={() => toast(GOOGLE_MSG)}><GoogleIcon /> Continue with Google</Button>
+            {user ? (
+              <Button variant="ghost" onClick={logout}>Sign Out</Button>
+            ) : (
+              <>
+                <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
+                <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
+              </>
+            )}
           </div>
           <button className="rounded-lg p-2 md:hidden" onClick={() => setMenu(!menu)} aria-label="Toggle menu">
             {menu ? <X /> : <Menu />}
@@ -84,8 +90,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               ))}
             </nav>
             <div className="mt-3 flex flex-col gap-2">
-              <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-              <Button variant="outline" onClick={() => toast(GOOGLE_MSG)}><GoogleIcon /> Continue with Google</Button>
+              {user ? (
+                <Button variant="ghost" onClick={logout}>Sign Out</Button>
+              ) : (
+                <>
+                  <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
+                  <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
+                </>
+              )}
             </div>
           </div>
         )}
