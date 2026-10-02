@@ -28,7 +28,30 @@ export function Logo() {
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [authOpen, setAuthOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
   const open = () => { setAuthOpen(true); setMenu(false); };
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      setUser(session?.user ?? null);
+      router.invalidate();
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router]);
+
+  const google = async () => {
+    const error = await signInWithGoogle();
+    if (error) toast.error(error);
+  };
+
+  const logout = async () => {
+    setMenu(false);
+    await signOut();
+    toast.success("Signed out");
+  };
   const navCls = "eyebrow px-4 py-2 text-muted-foreground transition-colors hover:text-foreground";
 
   return (
