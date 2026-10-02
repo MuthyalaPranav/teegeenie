@@ -1,17 +1,24 @@
 import { useState, type FormEvent } from "react";
 import { X } from "lucide-react";
 import { Button, GoogleIcon } from "./ui-kit";
-
-export const GOOGLE_MSG = "Google authentication will be connected in the backend version.";
+import { signInWithGoogle } from "@/lib/auth";
 
 export function AuthModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [notice, setNotice] = useState("");
+  const [busy, setBusy] = useState(false);
   if (!open) return null;
+
+  const google = async () => {
+    setBusy(true);
+    const error = await signInWithGoogle();
+    setBusy(false);
+    if (error) setNotice(error);
+  };
 
   const submit = (e: FormEvent) => {
     e.preventDefault();
-    setNotice(`${mode === "login" ? "Login" : "Sign up"} will be enabled in the backend version.`);
+    setNotice("Email sign-in is coming soon — please use Google for now.");
   };
 
   return (
@@ -23,8 +30,8 @@ export function AuthModal({ open, onClose }: { open: boolean; onClose: () => voi
         <h2 className="text-2xl font-bold">{mode === "login" ? "Welcome back" : "Create your account"}</h2>
         <p className="mt-1 text-sm text-muted-foreground">Start designing your dream tee with TeeGenie.</p>
 
-        <Button variant="outline" className="mt-6 w-full" onClick={() => setNotice(GOOGLE_MSG)}>
-          <GoogleIcon /> Continue with Google
+        <Button variant="outline" className="mt-6 w-full" onClick={google} disabled={busy}>
+          <GoogleIcon /> {busy ? "Connecting…" : "Continue with Google"}
         </Button>
         <div className="my-5 flex items-center gap-3 text-xs text-muted-foreground">
           <span className="h-px flex-1 bg-border" /> or <span className="h-px flex-1 bg-border" />
