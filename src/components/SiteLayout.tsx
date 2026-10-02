@@ -70,10 +70,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             {user ? (
               <Button variant="ghost" onClick={logout}>Sign Out</Button>
             ) : (
-              <>
-                <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-                <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
-              </>
+              <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
             )}
           </div>
           <button className="rounded-lg p-2 md:hidden" onClick={() => setMenu(!menu)} aria-label="Toggle menu">
@@ -93,10 +90,7 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               {user ? (
                 <Button variant="ghost" onClick={logout}>Sign Out</Button>
               ) : (
-                <>
-                  <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-                  <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
-                </>
+                <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
               )}
             </div>
           </div>
