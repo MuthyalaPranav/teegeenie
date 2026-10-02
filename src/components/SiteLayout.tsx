@@ -1,9 +1,12 @@
-import { createContext, useContext, useState, type ReactNode } from "react";
-import { Link } from "@tanstack/react-router";
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { Link, useRouter } from "@tanstack/react-router";
 import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
-import { AuthModal, GOOGLE_MSG } from "./AuthModal";
+import type { User } from "@supabase/supabase-js";
+import { AuthModal } from "./AuthModal";
 import { Button, GoogleIcon } from "./ui-kit";
+import { supabase } from "@/integrations/supabase/client";
+import { signInWithGoogle, signOut } from "@/lib/auth";
 
 const AuthCtx = createContext<() => void>(() => {});
 export const useOpenAuth = () => useContext(AuthCtx);
@@ -25,7 +28,30 @@ export function Logo() {
 export function SiteLayout({ children }: { children: ReactNode }) {
   const [authOpen, setAuthOpen] = useState(false);
   const [menu, setMenu] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
+  const router = useRouter();
   const open = () => { setAuthOpen(true); setMenu(false); };
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
+      setUser(session?.user ?? null);
+      router.invalidate();
+    });
+    return () => sub.subscription.unsubscribe();
+  }, [router]);
+
+  const google = async () => {
+    const error = await signInWithGoogle();
+    if (error) toast.error(error);
+  };
+
+  const logout = async () => {
+    setMenu(false);
+    await signOut();
+    toast.success("Signed out");
+  };
   const navCls = "eyebrow px-4 py-2 text-muted-foreground transition-colors hover:text-foreground";
 
   return (
@@ -41,8 +67,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             ))}
           </nav>
           <div className="hidden items-center gap-2 md:flex">
-            <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-            <Button variant="outline" onClick={() => toast(GOOGLE_MSG)}><GoogleIcon /> Continue with Google</Button>
+            {user ? (
+              <Button variant="ghost" onClick={logout}>Sign Out</Button>
+            ) : (
+              <>
+                <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
+                <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
+              </>
+            )}
           </div>
           <button className="rounded-lg p-2 md:hidden" onClick={() => setMenu(!menu)} aria-label="Toggle menu">
             {menu ? <X /> : <Menu />}
@@ -58,8 +90,14 @@ export function SiteLayout({ children }: { children: ReactNode }) {
               ))}
             </nav>
             <div className="mt-3 flex flex-col gap-2">
-              <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
-              <Button variant="outline" onClick={() => toast(GOOGLE_MSG)}><GoogleIcon /> Continue with Google</Button>
+              {user ? (
+                <Button variant="ghost" onClick={logout}>Sign Out</Button>
+              ) : (
+                <>
+                  <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
+                  <Button variant="outline" onClick={google}><GoogleIcon /> Continue with Google</Button>
+                </>
+              )}
             </div>
           </div>
         )}
