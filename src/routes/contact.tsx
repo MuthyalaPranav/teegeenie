@@ -37,7 +37,8 @@ function Contact() {
 
   const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
+    const form = e.currentTarget;
+    const res = schema.safeParse(Object.fromEntries(new FormData(form)));
     if (!res.success) {
       setErrors(Object.fromEntries(res.error.issues.map((i) => [i.path[0], i.message])));
       return;
@@ -47,7 +48,7 @@ function Contact() {
     try {
       await save({ data: res.data });
       setSent(true);
-      e.currentTarget.reset();
+      form.reset();
     } catch (err) {
       setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
     }
