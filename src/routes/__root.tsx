@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
   type ErrorComponentProps,
@@ -116,12 +117,17 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const isDashboard = useRouterState({ select: (s) => s.location.pathname.startsWith("/dashboard") });
 
   return (
     <QueryClientProvider client={queryClient}>
-      <SiteLayout>
+      {isDashboard ? (
         <Outlet />
-      </SiteLayout>
+      ) : (
+        <SiteLayout>
+          <Outlet />
+        </SiteLayout>
+      )}
       <Toaster position="top-center" />
     </QueryClientProvider>
   );

@@ -4,7 +4,7 @@ import { Menu, X } from "lucide-react";
 import { toast } from "sonner";
 import type { User } from "@supabase/supabase-js";
 import { AuthModal } from "./AuthModal";
-import { Button } from "./ui-kit";
+import { Button, btnClass } from "./ui-kit";
 import { supabase } from "@/integrations/supabase/client";
 import { signOut } from "@/lib/auth";
 
@@ -63,7 +63,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
           </nav>
           <div className="hidden items-center gap-2 md:flex">
             {user ? (
-              <Button variant="ghost" onClick={logout}>Sign Out</Button>
+              <>
+                <Link to="/dashboard" className={btnClass("ghost")}>Dashboard</Link>
+                <Button variant="ghost" onClick={logout}>Sign Out</Button>
+              </>
             ) : (
               <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
             )}
@@ -83,7 +86,10 @@ export function SiteLayout({ children }: { children: ReactNode }) {
             </nav>
             <div className="mt-3 flex flex-col gap-2">
               {user ? (
-                <Button variant="ghost" onClick={logout}>Sign Out</Button>
+                <>
+                  <Link to="/dashboard" onClick={() => setMenu(false)} className={btnClass("ghost")}>Dashboard</Link>
+                  <Button variant="ghost" onClick={logout}>Sign Out</Button>
+                </>
               ) : (
                 <Button variant="ghost" onClick={open}>Login / Sign Up</Button>
               )}
