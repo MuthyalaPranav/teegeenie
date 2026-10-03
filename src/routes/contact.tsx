@@ -1,7 +1,9 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
 import { useState, type FormEvent } from "react";
 import { CheckCircle2, Mail } from "lucide-react";
 import { z } from "zod";
+import { saveContactSubmission } from "@/lib/contact.functions";
 import { Button, SectionHeading } from "@/components/ui-kit";
 
 export const Route = createFileRoute("/contact")({
@@ -28,19 +30,28 @@ const schema = z.object({
 const field = "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-ring";
 
 function Contact() {
+  const save = useServerFn(saveContactSubmission);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [serverError, setServerError] = useState("");
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const res = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
+    const form = e.currentTarget;
+    const res = schema.safeParse(Object.fromEntries(new FormData(form)));
     if (!res.success) {
       setErrors(Object.fromEntries(res.error.issues.map((i) => [i.path[0], i.message])));
       return;
     }
     setErrors({});
-    setSent(true);
-    e.currentTarget.reset();
+    setServerError("");
+    try {
+      await save({ data: res.data });
+      setSent(true);
+      form.reset();
+    } catch (err) {
+      setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   const err = (k: string) => errors[k] && <p className="mt-1 text-xs text-destructive">{errors[k]}</p>;
@@ -61,6 +72,9 @@ function Contact() {
               <div className="flex items-center gap-2 rounded-xl bg-secondary p-3 text-sm text-secondary-foreground">
                 <CheckCircle2 className="h-4 w-4 text-success" /> Thanks! Your message has been sent. We'll get back to you soon.
               </div>
+            )}
+            {serverError && (
+              <p className="rounded-xl bg-secondary p-3 text-sm text-destructive">{serverError}</p>
             )}
             <div className="grid gap-4 sm:grid-cols-2">
               <div><input name="name" placeholder="Name" className={field} />{err("name")}</div>
