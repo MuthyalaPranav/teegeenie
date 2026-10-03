@@ -1,10 +1,9 @@
 # Roadmap
 
-## In progress
-- [ ] Connect Contact form to Lovable Cloud database
-  - Create `contact_submissions` table (id, name, email, subject, message, created_at)
-  - Save submissions from the existing Send Message button via a server function
-  - Keep existing UI, validation, and success behavior unchanged
+## Done
+- [x] Connect Contact form to Lovable Cloud database
+  - `contact_submissions` table created; Send Message saves via a server function
+  - Verified end-to-end; test rows cleaned up
 
 ## Backlog
 - [ ] Redesign About & Contact pages to match the luxury editorial homepage design
