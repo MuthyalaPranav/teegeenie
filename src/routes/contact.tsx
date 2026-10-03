@@ -72,6 +72,9 @@ function Contact() {
                 <CheckCircle2 className="h-4 w-4 text-success" /> Thanks! Your message has been sent. We'll get back to you soon.
               </div>
             )}
+            {serverError && (
+              <p className="rounded-xl bg-secondary p-3 text-sm text-destructive">{serverError}</p>
+            )}
             <div className="grid gap-4 sm:grid-cols-2">
               <div><input name="name" placeholder="Name" className={field} />{err("name")}</div>
               <div><input name="email" type="email" placeholder="Email" className={field} />{err("email")}</div>
