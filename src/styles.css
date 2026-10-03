@@ -35,6 +35,8 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-overlay: var(--overlay);
+  --color-dash-orange: var(--dash-orange);
+  --color-dash-soft: var(--dash-soft);
 }
 
 :root {
@@ -65,6 +67,12 @@
   --gradient-hero: linear-gradient(180deg, var(--background), var(--secondary));
   --shadow-soft: 0 1px 2px oklch(0.15 0 0 / 6%);
   --shadow-glow: 0 30px 60px -30px oklch(0.15 0 0 / 35%);
+  --dash-orange: oklch(0.68 0.19 45);
+  --dash-orange-glow: oklch(0.78 0.16 65);
+  --dash-soft: oklch(0.96 0.03 60);
+  --gradient-dash: linear-gradient(135deg, var(--dash-orange), var(--dash-orange-glow));
+  --gradient-dash-page: linear-gradient(160deg, oklch(0.99 0.01 70), oklch(1 0 0) 45%, oklch(0.97 0.03 60));
+  --shadow-dash: 0 20px 40px -20px color-mix(in oklab, var(--dash-orange) 55%, transparent);
 }
 
 @layer base {
@@ -87,3 +95,6 @@
 @utility shadow-glow { box-shadow: var(--shadow-glow); }
 @utility eyebrow { font-size: 0.7rem; letter-spacing: 0.28em; text-transform: uppercase; font-weight: 500; }
 @utility animate-float { animation: none; }
+@utility bg-gradient-dash { background-image: var(--gradient-dash); }
+@utility bg-gradient-dash-page { background-image: var(--gradient-dash-page); }
+@utility shadow-dash { box-shadow: var(--shadow-dash); }
