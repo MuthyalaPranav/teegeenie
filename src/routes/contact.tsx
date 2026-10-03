@@ -30,10 +30,12 @@ const schema = z.object({
 const field = "w-full rounded-xl border border-input bg-background px-4 py-3 text-sm outline-none transition focus:ring-2 focus:ring-ring";
 
 function Contact() {
+  const save = useServerFn(saveContactSubmission);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [sent, setSent] = useState(false);
+  const [serverError, setServerError] = useState("");
 
-  const submit = (e: FormEvent<HTMLFormElement>) => {
+  const submit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const res = schema.safeParse(Object.fromEntries(new FormData(e.currentTarget)));
     if (!res.success) {
@@ -41,8 +43,14 @@ function Contact() {
       return;
     }
     setErrors({});
-    setSent(true);
-    e.currentTarget.reset();
+    setServerError("");
+    try {
+      await save({ data: res.data });
+      setSent(true);
+      e.currentTarget.reset();
+    } catch (err) {
+      setServerError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
+    }
   };
 
   const err = (k: string) => errors[k] && <p className="mt-1 text-xs text-destructive">{errors[k]}</p>;
