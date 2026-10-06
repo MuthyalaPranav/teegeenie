@@ -1,5 +1,11 @@
 # Roadmap
 
+## In Progress
+- [ ] Add the AI T-shirt Designer from the uploaded brief
+  - Protected designer page and one sidebar link
+  - Authenticated AI generation, PNG preview/download, and saved-design storage
+  - Owner-only saved-design list in My Designs
+
 ## Done
 - [x] Connect Contact form to Lovable Cloud database
   - `contact_submissions` table created; Send Message saves via a server function
